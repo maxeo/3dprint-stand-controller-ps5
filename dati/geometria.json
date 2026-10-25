@@ -1,0 +1,189 @@
+{
+ "montaggio": {
+  "P01_Base": {
+   "min": [
+    -89.99,
+    -90.0,
+    0.0
+   ],
+   "max": [
+    89.99,
+    90.0,
+    42.0
+   ],
+   "size": [
+    179.99,
+    179.99,
+    42.0
+   ],
+   "volume_mm3": 221571,
+   "non_manifold_edges": 0
+  },
+  "P02_Sostegno": {
+   "min": [
+    -37.5,
+    -34.3,
+    3.0
+   ],
+   "max": [
+    107.73,
+    34.3,
+    251.78
+   ],
+   "size": [
+    145.23,
+    68.59,
+    248.78
+   ],
+   "volume_mm3": 585643,
+   "non_manifold_edges": 0
+  },
+  "P03_Portapenne": {
+   "min": [
+    -87.5,
+    -24.0,
+    8.0
+   ],
+   "max": [
+    -39.5,
+    24.0,
+    98.0
+   ],
+   "size": [
+    48.0,
+    48.0,
+    90.0
+   ],
+   "volume_mm3": 38733,
+   "non_manifold_edges": 0
+  }
+ },
+ "giochi_mm": {
+  "portapenne-sostegno": 7.52,
+  "culla-sostegno": 2.11,
+  "custodia-sostegno": 5.51,
+  "custodia-culla_raggio": 0.55
+ },
+ "filetto": {
+  "diametro": 20.0,
+  "passo": 2.5,
+  "profondita": 1.25,
+  "lunghezza_perno": 7.0,
+  "gioco_radiale": 0.35,
+  "madrevite_profonda": 8.0
+ },
+ "holder": {
+  "traslazione_x": 17.798,
+  "spalla_y": -119.392
+ },
+ "stampa": {
+  "P01_Base.stl": {
+   "min": [
+    -89.99,
+    -90.0,
+    0.0
+   ],
+   "max": [
+    89.99,
+    90.0,
+    42.0
+   ],
+   "size": [
+    179.99,
+    179.99,
+    42.0
+   ],
+   "volume_mm3": 221571,
+   "non_manifold_edges": 0,
+   "matrice_montaggio": [
+    [
+     1.0,
+     -0.0,
+     0.0
+    ],
+    [
+     -0.0,
+     1.0,
+     -0.0
+    ],
+    [
+     0.0,
+     -0.0,
+     1.0
+    ]
+   ]
+  },
+  "P02_Sostegno.stl": {
+   "min": [
+    -55.29,
+    -124.39,
+    0.0
+   ],
+   "max": [
+    89.94,
+    124.39,
+    68.59
+   ],
+   "size": [
+    145.23,
+    248.78,
+    68.59
+   ],
+   "volume_mm3": 585643,
+   "non_manifold_edges": 0,
+   "matrice_montaggio": [
+    [
+     1.0,
+     -0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ]
+   ]
+  },
+  "P03_Portapenne.stl": {
+   "min": [
+    -24.0,
+    -24.0,
+    0.0
+   ],
+   "max": [
+    24.0,
+    24.0,
+    90.0
+   ],
+   "size": [
+    48.0,
+    48.0,
+    90.0
+   ],
+   "volume_mm3": 38733,
+   "non_manifold_edges": 0,
+   "matrice_montaggio": [
+    [
+     1.0,
+     -0.0,
+     0.0
+    ],
+    [
+     -0.0,
+     1.0,
+     -0.0
+    ],
+    [
+     0.0,
+     -0.0,
+     1.0
+    ]
+   ]
+  }
+ }
+}

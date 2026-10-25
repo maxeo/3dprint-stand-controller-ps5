@@ -1,0 +1,98 @@
+{
+ "root": "..",
+ "output": "guida.html",
+ "title": "Stand Controller PS5 · Guida",
+ "theme": {"accent": "#2f6fd0", "viewer_bg": "#1b1f27"},
+ "header": {
+  "eyebrow": "Stand Controller PS5 · controller, cuffie, penne e FreeBuds 3",
+  "h1": "Un controller, una vite, una culla.",
+  "intro_html": "<b>Il supporto per due controller PS5 diventa uno stand da scrivania.</b> Il braccio basso non c'è più: al suo posto un portapenne che si avvita alla base. Dietro la colonna, stampata insieme alla base, una culla tiene in piedi la custodia delle <b>HUAWEI FreeBuds 3</b>. Il braccio alto per il controller e il gancio per le cuffie restano quelli dell'originale.",
+  "facts": [
+   {"value": "Ø180 × 252 mm", "label": "ingombro"},
+   {"value": "3 pezzi", "label": "nessuna vite"},
+   {"value": "Ø20 × 2,5", "label": "filetto del portapenne"},
+   {"value": "Ø60,9 × 21,8", "label": "custodia FreeBuds 3"}
+  ]
+ },
+ "camera": {"yaw": 2.45, "pitch": 0.38},
+ "caption": "Vista dal davanti. Il controller va sul braccio in alto, la custodia delle FreeBuds nella culla dietro la colonna.",
+ "model_note_html": "<span class='badge'>Quote del modello</span><p>Base Ø180 mm, colonna alta 248,8 mm, larga 68,6 mm come l'originale. Portapenne Ø48 × 90 mm, vano Ø44 profondo 80 mm. Culla per una custodia Ø60,9 × 21,8 mm (scheda Huawei): tasca Ø62 × 23 mm.</p>",
+ "groups": {"Stand": {"color": "#5b6b82"}, "Portapenne": {"color": "#d9a441"}},
+ "parts": [
+  {"id": "P01", "label": "Base con perno e culla", "group": "Stand", "file": "stl/P01_Base.stl", "print": "base",
+   "mode": "mesh", "max_triangles": 6000,
+   "note_html": "<p>La base originale (Ø180 × 8 mm, sede 32,9 × 68,6 × 5 mm) con due aggiunte stampate in un pezzo: davanti il perno filettato Ø20 × 7 mm per il portapenne, dietro la culla della custodia FreeBuds 3, alta 34 mm, con un intaglio a U su entrambe le sponde.</p>"},
+  {"id": "P02", "label": "Colonna", "group": "Stand", "file": "stl/P02_Sostegno.stl", "print": "colonna",
+   "mode": "mesh", "max_triangles": 6000,
+   "matrix": [[1, 0, 0], [0, 0, -1], [0, 1, 0]],
+   "assembled_bounds": [[-37.5, 107.73], [-34.3, 34.3], [3.0, 251.78]],
+   "note_html": "<p>Il holder originale senza il braccio basso: il taglio segue la linea della colonna fra i due tratti rimasti. Il tenone in fondo (32,9 × 68,6 × 5 mm) entra nella sede della base.</p>"},
+  {"id": "P03", "label": "Portapenne", "group": "Portapenne", "file": "stl/P03_Portapenne.stl", "print": "portapenne",
+   "mode": "mesh", "max_triangles": 4000,
+   "assembled_bounds": [[-87.5, -39.5], [-24.0, 24.0], [8.0, 98.0]],
+   "note_html": "<p>Ø48 × 90 mm, parete 2 mm, fondo pieno da 10 mm con la madrevite Ø20,7 profonda 8 mm. Montato resta a 2 mm dalla colonna.</p>"}
+ ],
+ "steps_section": {
+  "eyebrow": "01 / Montaggio",
+  "h2": "Infila, avvita, appoggia.",
+  "intro_html": "Davanti è il lato del portapenne e del controller; dietro c'è la culla delle FreeBuds. Niente colla: la colonna sta nella sede come nell'originale, il portapenne si avvita."
+ },
+ "steps": [
+  {"title": "Infila la colonna nella base", "short": "tenone nella sede · dall'alto",
+   "text": "Tieni la colonna con il braccio verso il perno filettato e il gancio delle cuffie verso la culla. Infila il tenone nella sede rettangolare della base fino in battuta: la spalla della colonna appoggia sul piano della base. Le misure sono quelle dell'originale, senza gioco: se entra duro, passa una lima sui bordi del tenone, non sulla sede.",
+   "parts": ["P01", "P02"], "built": ["P01", "P02"], "moving": ["P02"], "dir": [0, 0, 1], "travel": 70},
+  {"title": "Avvita il portapenne", "short": "orario · circa 3 giri",
+   "text": "Appoggia il portapenne sul perno davanti alla colonna e giralo in senso orario: bastano circa tre giri (7 mm di filetto, passo 2,5) per portarlo in battuta sulla base. Stringi a mano senza forzare: fra il bordo e la colonna restano 2 mm.",
+   "parts": ["P01", "P03"], "built": ["P01", "P02", "P03"], "moving": ["P03"], "dir": [0, 0, 1], "travel": 40},
+  {"title": "Metti la custodia nella culla", "short": "in piedi · coperchio in alto",
+   "text": "Infila la custodia delle FreeBuds 3 in piedi nella culla dietro la colonna, con il coperchio in alto e le facce rivolte avanti e indietro. Resta 0,55 mm di gioco attorno e 0,6 mm per lato in spessore. Per toglierla spingila con un dito attraverso l'intaglio a U. Il controller va sul braccio in alto e le cuffie sul gancio, come nell'originale.",
+   "parts": ["P01", "P02", "P03"], "built": ["P01", "P02", "P03"]}
+ ],
+ "map": {
+  "eyebrow": "02 / Sigle",
+  "h2": "Tre pezzi.",
+  "cards": [{"title": "Stand · vista di lato", "columns": 3, "top_label": "Davanti", "bottom_label": "Dietro",
+             "ids": ["P03", "P02", "P01"],
+             "note_html": "P03 sta davanti, avvitato su P01. P02 si infila al centro di P01. La culla fa parte di P01."}]
+ },
+ "print": {
+  "eyebrow": "03 / Stampa",
+  "h2": "Tre stampe, senza supporti.",
+  "common_html": "<b>Profilo comune:</b> ugello 0,4 mm, strato 0,20 mm, 2 pareti, 15% di riempimento a griglia, 5 strati sopra e 3 sotto, niente supporti. Sono i valori dei 3mf originali (Bambu P1S); su Kobra S1 con PETG sono un <b>punto di partenza da verificare</b>, così come i nuovi pezzi, che non sono ancora stati stampati. STL in millimetri, scala 100%, già appoggiati a Z = 0 e orientati per la stampa.",
+  "profiles": [
+   {"key": "base", "title": "P01 · base", "rows": [["Orientamento", "piatta, sotto sul piatto"], ["Pareti", "3"], ["Riempimento", "15% griglia"], ["Supporti", "no"], ["Ingombro", "180 × 180 × 42 mm"]],
+    "why": "Stampata piatta, perno e culla crescono in verticale: il filetto esce senza sbalzi e con il passo da 2,5 mm è ben definito anche a 0,20 mm di strato. 3 pareti al posto di 2 perché il perno filettato sia pieno e robusto.",
+    "summary": "piatta · 3 pareti · senza supporti"},
+   {"key": "colonna", "title": "P02 · colonna", "rows": [["Orientamento", "sdraiata sul fianco, come nel 3mf"], ["Pareti", "2"], ["Riempimento", "15% griglia"], ["Supporti", "no"], ["Ingombro", "145,2 × 248,8 × 68,6 mm"]],
+    "why": "Sdraiata, la colonna è un profilo estruso: nessuno sbalzo e strati lungo tutta la lunghezza, quindi niente punti deboli quando il controller carica il braccio. I 248,8 mm stanno appena nel piatto da 250: mettila in diagonale per avere margine per il brim.",
+    "summary": "sdraiata · 2 pareti · in diagonale sul piatto"},
+   {"key": "portapenne", "title": "P03 · portapenne", "rows": [["Orientamento", "in piedi, madrevite sul piatto"], ["Pareti", "2"], ["Riempimento", "15% griglia"], ["Supporti", "no"], ["Ingombro", "48 × 48 × 90 mm"]],
+    "why": "In piedi la madrevite esce rotonda. Il cielo della madrevite è un ponte di Ø20,7 mm sotto il fondo pieno da 2 mm: senza supporti esce un po' cadente, ma non tocca il perno, che è lungo 7 mm in una sede profonda 8.",
+    "summary": "in piedi · ponte Ø20,7 sopra la madrevite"}
+  ],
+  "note_html": "Il filetto ha 0,35 mm di gioco sul raggio, pensato per il PETG. Se è troppo duro o troppo lasco cambia <code>TH_GAP</code> in <code>blender/costruisci.py</code> e rigenera."
+ },
+ "notes": {
+  "eyebrow": "04 / Il filetto",
+  "h2": "Un perno, tre giri.",
+  "nav": "Filetto",
+  "cards": [
+   {"title": "Sezione del filetto",
+    "html": "<p>Filetto destro trapezoidale a 60°: diametro esterno 20 mm, passo 2,5 mm, profondità 1,25 mm. Il perno sporge 7 mm dalla base e ha la punta smussata a 45°. La madrevite è la stessa forma allargata di 0,35 mm sul raggio, profonda 8 mm, con un invito alla bocca.</p><svg viewBox='0 0 420 250' role='img' aria-label='Sezione di perno e madrevite, quote in mm' style='width:100%;height:auto'><rect width='420' height='250' fill='#fff'/><rect x='20' y='170' width='380' height='50' fill='#cfd6e0'/><text x='28' y='210' font-size='13' fill='#1b1f27' font-weight='700'>P01 · base, 8 mm</text><rect x='20' y='40' width='120' height='130' fill='#f3e1b6'/><rect x='280' y='40' width='120' height='130' fill='#f3e1b6'/><text x='28' y='60' font-size='13' fill='#1b1f27' font-weight='700'>P03 · fondo</text><path d='M150 170 L150 80 L160 70 L260 70 L270 80 L270 170 Z' fill='#9fb0c8' stroke='#2f6fd0' stroke-width='1.5'/><g stroke='#2f6fd0' stroke-width='1.2' fill='none'><path d='M150 160 l-8 -6 l0 -10 l8 -6 M150 132 l-8 -6 l0 -10 l8 -6 M150 104 l-8 -6 l0 -10 l8 -6'/><path d='M270 160 l8 -6 l0 -10 l8 -6 M270 132 l8 -6 l0 -10 l8 -6 M270 104 l8 -6 l0 -10 l8 -6'/></g><line x1='140' y1='60' x2='280' y2='60' stroke='#1b1f27' stroke-dasharray='5 3'/><text x='165' y='54' font-size='12' fill='#1b1f27'>cielo a 8 mm</text><text x='178' y='125' font-size='13' fill='#1b1f27' font-weight='700'>perno Ø20</text><text x='176' y='142' font-size='12' fill='#1b1f27'>alto 7 · passo 2,5</text><text x='292' y='120' font-size='12' fill='#1b1f27'>madrevite</text><text x='292' y='136' font-size='12' fill='#1b1f27'>Ø20,7 · gioco 0,35</text></svg>"},
+   {"title": "La culla delle FreeBuds 3",
+    "html": "<p>La custodia delle FreeBuds 3 è un disco Ø60,9 × 21,8 mm (scheda Huawei). La tasca è un cilindro Ø62 × 23 mm, con il fondo 2 mm sopra la base: tiene la custodia per i 32 mm più bassi. L'intaglio a U (raggio 17 mm) apre le due sponde fino a 14,5 mm dal fondo. <b>Le misure vengono dalla scheda del produttore: controllale sulla custodia reale</b> prima di stampare la base, che è il pezzo più lungo. La culla non lascia passare il cavo USB-C.</p>"}
+  ]
+ },
+ "files": {
+  "h2": "I file.",
+  "intro_html": "Tutti i file stanno accanto a questa guida.",
+  "links": [
+   {"label": "File Blender (assieme, originali e custodia di riferimento)", "href": "blender/Stand_Controller_PS5.blend"},
+   {"label": "Script che genera i pezzi", "href": "blender/costruisci.py"},
+   {"label": "Misure e verifiche", "href": "dati/geometria.json"},
+   {"label": "Base originale (3mf)", "href": "originale/base.3mf"},
+   {"label": "Holder originale (3mf)", "href": "originale/holder.3mf"}
+  ]
+ },
+ "footer_html": "Creata il 25 ottobre 2026. Guida offline: aprire questo file dalla cartella del progetto."
+}
