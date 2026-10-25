@@ -9,14 +9,14 @@
    "max": [
     94.99,
     95.0,
-    42.0
+    8.0
    ],
    "size": [
     189.99,
     189.99,
-    42.0
+    8.0
    ],
-   "volume_mm3": 233854,
+   "volume_mm3": 199506,
    "non_manifold_edges": 0
   },
   "P02_Sostegno": {
@@ -35,7 +35,7 @@
     68.59,
     248.78
    ],
-   "volume_mm3": 585371,
+   "volume_mm3": 575817,
    "non_manifold_edges": 0
   },
   "P03_Portapenne": {
@@ -56,13 +56,54 @@
    ],
    "volume_mm3": 25991,
    "non_manifold_edges": 0
+  },
+  "P04_Portatelecomando": {
+   "min": [
+    -38.25,
+    30.5,
+    11.0
+   ],
+   "max": [
+    4.25,
+    74.28,
+    71.16
+   ],
+   "size": [
+    42.5,
+    43.78,
+    60.16
+   ],
+   "volume_mm3": 47090,
+   "non_manifold_edges": 0
+  },
+  "P05_Culla": {
+   "min": [
+    31.5,
+    -34.5,
+    4.3
+   ],
+   "max": [
+    60.1,
+    34.5,
+    42.0
+   ],
+   "size": [
+    28.6,
+    69.0,
+    37.7
+   ],
+   "volume_mm3": 33799,
+   "non_manifold_edges": 0
   }
  },
  "giochi_mm": {
   "portapenne-sostegno": 2.0,
   "culla-sostegno": 2.11,
   "custodia-sostegno": 5.51,
-  "custodia-culla_raggio": 0.55
+  "custodia-culla_raggio": 0.55,
+  "telecomando-controller": 19.57,
+  "telecomando-penne": 38.27,
+  "modulo-portapenne": 19.25
  },
  "viti": {
   "posizioni": [
@@ -82,7 +123,7 @@
   "materiale_attorno_al_foro_guida": {
    "davanti": 5.29,
    "dietro": 33.35,
-   "fianco": 12.5
+   "fianco": 8.64
   },
   "materiale_fra_svasatura_e_sede": 3.1,
   "gioco_sede_per_lato": 0.15,
@@ -95,6 +136,24 @@
   "lunghezza_vite": 5.7,
   "gioco_radiale": 0.4,
   "madrevite_profonda": 6.0
+ },
+ "culla": {
+  "tacco": 3.7,
+  "rientro_tacco": 2.0,
+  "gioco_tacco_per_lato": 0.1,
+  "fondo_sotto_la_sede": 4.0
+ },
+ "guida_telecomando": {
+  "x_asse": -17.0,
+  "larghezza_in_faccia": 10.0,
+  "profondita": 4.0,
+  "z": [
+   18.0,
+   145.0
+  ],
+  "gioco_lingua": 0.2,
+  "lunghezza_lingua": 50.0,
+  "inclinazione_tasca": 20.0
  },
  "holder": {
   "traslazione_x": 17.798,
@@ -110,14 +169,14 @@
    "max": [
     94.99,
     95.0,
-    42.0
+    8.0
    ],
    "size": [
     189.99,
     189.99,
-    42.0
+    8.0
    ],
-   "volume_mm3": 233854,
+   "volume_mm3": 199506,
    "non_manifold_edges": 0,
    "matrice_montaggio": [
     [
@@ -153,7 +212,7 @@
     248.78,
     68.59
    ],
-   "volume_mm3": 585371,
+   "volume_mm3": 575817,
    "non_manifold_edges": 0,
    "matrice_montaggio": [
     [
@@ -190,6 +249,78 @@
     95.7
    ],
    "volume_mm3": 25991,
+   "non_manifold_edges": 0,
+   "matrice_montaggio": [
+    [
+     1.0,
+     -0.0,
+     0.0
+    ],
+    [
+     -0.0,
+     1.0,
+     -0.0
+    ],
+    [
+     0.0,
+     -0.0,
+     1.0
+    ]
+   ]
+  },
+  "P04_Portatelecomando.stl": {
+   "min": [
+    -38.25,
+    30.5,
+    0.0
+   ],
+   "max": [
+    4.25,
+    74.28,
+    60.16
+   ],
+   "size": [
+    42.5,
+    43.78,
+    60.16
+   ],
+   "volume_mm3": 47090,
+   "non_manifold_edges": 0,
+   "matrice_montaggio": [
+    [
+     1.0,
+     -0.0,
+     0.0
+    ],
+    [
+     -0.0,
+     1.0,
+     -0.0
+    ],
+    [
+     0.0,
+     -0.0,
+     1.0
+    ]
+   ]
+  },
+  "P05_Culla_FreeBuds.stl": {
+   "min": [
+    31.5,
+    -34.5,
+    0.0
+   ],
+   "max": [
+    60.1,
+    34.5,
+    37.7
+   ],
+   "size": [
+    28.6,
+    69.0,
+    37.7
+   ],
+   "volume_mm3": 33799,
    "non_manifold_edges": 0,
    "matrice_montaggio": [
     [

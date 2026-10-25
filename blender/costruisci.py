@@ -46,6 +46,25 @@ FB_X0 = 31.5                             # inizio culla (retro della colonna a X
 FB_FLOOR = 2.0                           # fondo della culla sopra la base
 FB_TOP = 34.0                            # altezza delle sponde
 FB_HALF_Y = FB_R + 3.5
+# la culla è un pezzo a parte: un tacco sotto entra in una sede della base
+FB_PLUG = 3.7                            # altezza del tacco
+FB_INSET = 2.0                           # rientro del tacco dal bordo della culla
+FB_PLUG_GAP = 0.1                        # gioco per lato: incastro a mano, senza colla
+# telecomando 37,5 × 14,3 × 150,7: modulo a parte, infilato in una guida a coda di rondine
+# su uno dei due fianchi del montante (le guide sono due, il modulo è lo stesso girato di 180°)
+TC_W, TC_T, TC_L = 37.5, 14.3, 150.7
+TC_GAP = 0.5                             # gioco per lato nella tasca
+TC_TILT = 20.0                           # la cima si allontana dal montante e passa fuori dal controller
+TC_DEPTH = 55.0                          # tasca lungo l'asse del telecomando
+TC_WALL = 2.0
+TC_Z0 = 11.0                             # fondo del modulo, 3 mm sopra la base
+TC_PLATE = 3.0                           # piastra contro il fianco
+SIDE_Y = 34.3                            # fianchi piani del montante
+DT_X = -17.0                             # asse delle guide
+DT_W, DT_D = 10.0, 4.0                   # coda di rondine: larghezza in faccia e profondità, fianchi a 60°
+DT_Z0, DT_Z1 = 18.0, 145.0               # fondo chiuso (battuta) e uscita dal bordo anteriore del montante
+DT_GAP = 0.2                             # gioco della lingua per lato e sul fondo
+DT_LEN = 50.0                            # lingua del modulo
 # taglio del braccio basso, nel profilo del holder (x, y prima della rotazione)
 ARM_CUT = [(-130, -75), (-57.65, -75), (-45.0, -28.0), (-130, -28.0)]
 
@@ -184,6 +203,18 @@ for sx, sy in SCREWS:
     boolean(sup, radial_solid(lambda t, z: SCREW_PILOT / 2, BASE_TOP - 1.0, BASE_TOP + SCREW_PILOT_DEPTH, sx, sy,
                               "foro_guida", C_STAMPA, seg=32, dz=30), 'DIFFERENCE')
 
+# guide a coda di rondine sui due fianchi: fondo chiuso in basso, aperte in alto dove
+# il bordo anteriore del montante arretra
+def dovetail(c, depth, half_face, s, gap=0.0, out=1.0):
+    """Profilo XY della coda di rondine sul fianco s (+1/-1): stretta in faccia, larga sul fondo."""
+    a = half_face - gap
+    b = half_face + depth * math.tan(math.radians(30)) - gap
+    y_out, y_face, y_bot = SIDE_Y + out, SIDE_Y, SIDE_Y - depth
+    pts = [(c - a, y_out), (c - a, y_face), (c - b, y_bot), (c + b, y_bot), (c + a, y_face), (c + a, y_out)]
+    return [(x, s * y) for x, y in pts]
+for s_ in (1, -1):
+    boolean(sup, prism(dovetail(DT_X, DT_D, DT_W / 2, s_), DT_Z0, DT_Z1, "guida", C_STAMPA), 'DIFFERENCE')
+
 # --- P01 base: perno filettato + culla FreeBuds ------------------------
 base = base_o.copy(); base.data = base_o.data.copy()
 base.name = base.data.name = "P01_Base"
@@ -236,20 +267,27 @@ def x_cylinder(r, length, cx, cz, name):
     C_STAMPA.objects.link(o)
     return o
 
-cradle = prism(rounded_rect(fx0, fx1, -FB_HALF_Y, FB_HALF_Y, 3.0), BASE_TOP - 1.0, BASE_TOP + FB_TOP, "culla", C_STAMPA)
-boolean(base, cradle, 'UNION')
+# --- P05 culla FreeBuds: pezzo a parte con un tacco incastrato nella base ---
+cr = prism(rounded_rect(fx0, fx1, -FB_HALF_Y, FB_HALF_Y, 3.0), BASE_TOP, BASE_TOP + FB_TOP, "P05_Culla", C_STAMPA)
+boolean(cr, prism(rounded_rect(fx0 + FB_INSET, fx1 - FB_INSET, -FB_HALF_Y + FB_INSET, FB_HALF_Y - FB_INSET, 1.5),
+                  BASE_TOP - FB_PLUG, BASE_TOP + 0.5, "tacco", C_STAMPA), 'UNION')
 fb_cz = BASE_TOP + FB_FLOOR + FB_R
-boolean(base, x_cylinder(FB_R, FB_W, (fx0 + fx1) / 2, fb_cz, "tasca"), 'DIFFERENCE')
+boolean(cr, x_cylinder(FB_R, FB_W, (fx0 + fx1) / 2, fb_cz, "tasca"), 'DIFFERENCE')
 # intaglio a U nelle due sponde: la custodia resta in vista e si spinge fuori col dito
 FB_NOTCH = 17.0
-boolean(base, x_cylinder(FB_NOTCH, fx1 - fx0 + 2, (fx0 + fx1) / 2, fb_cz, "intaglio"), 'DIFFERENCE')
-boolean(base, box(fx0 - 1, fx1 + 1, -FB_NOTCH, FB_NOTCH, fb_cz, fb_cz + 40, "intaglio_alto", C_STAMPA), 'DIFFERENCE')
-# smusso di 1 mm sugli spigoli alti della culla
-bm = bmesh.new(); bm.from_mesh(base.data)
+boolean(cr, x_cylinder(FB_NOTCH, fx1 - fx0 + 2, (fx0 + fx1) / 2, fb_cz, "intaglio"), 'DIFFERENCE')
+boolean(cr, box(fx0 - 1, fx1 + 1, -FB_NOTCH, FB_NOTCH, fb_cz, fb_cz + 40, "intaglio_alto", C_STAMPA), 'DIFFERENCE')
+# smusso di 0,8 mm sugli spigoli alti della culla
+bm = bmesh.new(); bm.from_mesh(cr.data)
 edges = [e for e in bm.edges if all(abs(v.co.z - (BASE_TOP + FB_TOP)) < 1e-3 for v in e.verts)
-         and all(v.co.x > fx0 - 0.01 for v in e.verts)
          and abs(e.verts[0].co.x - e.verts[1].co.x) + abs(e.verts[0].co.y - e.verts[1].co.y) > 2.0]
 bmesh.ops.bevel(bm, geom=edges, offset=0.8, segments=1, affect='EDGES')
+bm.to_mesh(cr.data); bm.free()
+# sede del tacco nella base, 0,3 mm più profonda: la culla appoggia sempre con la spalla
+g = FB_PLUG_GAP
+boolean(base, prism(rounded_rect(fx0 + FB_INSET - g, fx1 - FB_INSET + g, -FB_HALF_Y + FB_INSET - g, FB_HALF_Y - FB_INSET + g,
+                                 1.5 + g), BASE_TOP - FB_PLUG - 0.3, BASE_TOP + 1.0, "sede_culla", C_STAMPA), 'DIFFERENCE')
+bm = bmesh.new(); bm.from_mesh(base.data)
 # il piano superiore esce dalle booleane a ventaglio, con schegge lunghe dal perno agli angoli
 # della sede (si vedono come righe nella guida): lo ritriangolo con spigoli scambiati alla Delaunay
 # con punti interni: spezzo gli spigoli interni lunghi (il contorno resta com'è)
@@ -404,6 +442,46 @@ bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VE
 bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
 bm.to_mesh(cup.data); bm.free()
 
+# --- P04 porta-telecomando ---------------------------------------------
+# guscio = involucro convesso di piastra e tasca inclinata, poi la cavità e la lingua
+TC_R = Matrix.Rotation(math.radians(-TC_TILT), 4, 'X')    # la cima va verso +Y
+cw, ct = TC_W / 2 + TC_GAP, TC_T + 2 * TC_GAP
+plate_y0 = SIDE_Y + DT_GAP
+plate_y1 = plate_y0 + TC_PLATE
+far_bottom = TC_R @ Vector((0, ct + TC_WALL, -TC_WALL))
+near_bottom = TC_R @ Vector((0, -TC_WALL, -TC_WALL))
+TC_M = Matrix.Translation((DT_X, plate_y1 - 0.5 - near_bottom.y, TC_Z0 - far_bottom.z)) @ TC_R
+def box_pts(x0, x1, y0, y1, z0, z1):
+    return [Vector((x, y, z)) for x in (x0, x1) for y in (y0, y1) for z in (z0, z1)]
+bm = bmesh.new()
+pts = box_pts(DT_X - cw - TC_WALL, DT_X + cw + TC_WALL, plate_y0, plate_y1, TC_Z0, DT_Z0 + DT_LEN + 2)
+pts += [TC_M @ p for p in box_pts(-cw - TC_WALL, cw + TC_WALL, -TC_WALL, ct + TC_WALL, -TC_WALL, TC_DEPTH)]
+for p in pts:
+    bm.verts.new(p)
+bmesh.ops.convex_hull(bm, input=bm.verts)
+bmesh.ops.dissolve_limit(bm, angle_limit=0.001, verts=bm.verts, edges=bm.edges)
+tcm = obj_from_bm(bm, "P04_Portatelecomando", C_STAMPA)
+bev = tcm.modifiers.new("arrotonda", 'BEVEL'); bev.width = 1.2; bev.segments = 3
+bev.limit_method = 'ANGLE'; bev.angle_limit = math.radians(30)
+bpy.context.view_layer.objects.active = tcm
+bpy.ops.object.modifier_apply(modifier=bev.name)
+bm = bmesh.new()
+for p in box_pts(-cw, cw, 0, ct, 0, 200):
+    bm.verts.new(TC_M @ p)
+bmesh.ops.convex_hull(bm, input=bm.verts)
+boolean(tcm, obj_from_bm(bm, "cavita", C_STAMPA), 'DIFFERENCE')
+tongue = prism(dovetail(DT_X, DT_D - DT_GAP, DT_W / 2, 1, gap=DT_GAP, out=DT_GAP + 0.5),
+               DT_Z0, DT_Z0 + DT_LEN, "lingua", C_STAMPA)
+boolean(tcm, tongue, 'UNION')
+
+# --- riferimento: telecomando ------------------------------------------
+bm = bmesh.new()
+for p in box_pts(-TC_W / 2, TC_W / 2, TC_GAP, TC_GAP + TC_T, 0, TC_L):
+    bm.verts.new(TC_M @ p)
+bmesh.ops.convex_hull(bm, input=bm.verts)
+tc = obj_from_bm(bm, "RIF_Telecomando", C_RIF)
+bev = tc.modifiers.new("arrotonda", 'BEVEL'); bev.width = 3; bev.segments = 4
+
 # --- riferimento: custodia FreeBuds 3 ----------------------------------
 bpy.ops.mesh.primitive_cylinder_add(vertices=96, radius=FB_D / 2, depth=FB_T,
                                     location=((fx0 + fx1) / 2, 0, BASE_TOP + FB_FLOOR + FB_D / 2 + 0.55),
@@ -423,7 +501,8 @@ def mat(name, rgb):
     bsdf = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
     bsdf.inputs[0].default_value = (*rgb, 1)
     return m
-for o, rgb in [(base, (0.12, 0.12, 0.13)), (sup, (0.15, 0.15, 0.16)), (cup, (0.75, 0.75, 0.72)), (fb, (0.95, 0.95, 0.95))]:
+for o, rgb in [(base, (0.12, 0.12, 0.13)), (sup, (0.15, 0.15, 0.16)), (cup, (0.75, 0.75, 0.72)), (fb, (0.95, 0.95, 0.95)), (cr, (0.12, 0.12, 0.13)),
+               (tcm, (0.75, 0.75, 0.72)), (tc, (0.05, 0.05, 0.05))]:
     o.data.materials.append(mat("M_" + o.name, rgb))
 
 # --- verifiche e STL --------------------------------------------------
@@ -463,7 +542,7 @@ def pilot_walls():
         out[name] = round(best, 2)
     return out
 
-geo = {"montaggio": {o.name: info(o) for o in (base, sup, cup)},
+geo = {"montaggio": {o.name: info(o) for o in (base, sup, cup, tcm, cr)},
        "giochi_mm": {"portapenne-sostegno": round(min(v.co.x for v in sup.data.vertices
                                                            if BASE_TOP < v.co.z < BASE_TOP + PP_H) - (TH_X + PP_R), 2), "culla-sostegno": round(FB_X0 - max(v.co.x for v in sup.data.vertices
                                                            if BASE_TOP + 0.01 < v.co.z < BASE_TOP + FB_TOP + 1), 2),
@@ -477,13 +556,17 @@ geo = {"montaggio": {o.name: info(o) for o in (base, sup, cup)},
                 "gioco_sede_per_lato": SLOT_GAP, "sede_piu_profonda": SLOT_DEEPER},
        "filetto": {"diametro_vite": TH_R * 2, "passo": TH_P, "profondita": TH_H, "lunghezza_vite": TH_LEN,
                    "gioco_radiale": TH_GAP, "madrevite_profonda": TH_RECESS},
+       "culla": {"tacco": FB_PLUG, "rientro_tacco": FB_INSET, "gioco_tacco_per_lato": FB_PLUG_GAP,
+                 "fondo_sotto_la_sede": round(BASE_TOP - FB_PLUG - 0.3, 2)},
+       "guida_telecomando": {"x_asse": DT_X, "larghezza_in_faccia": DT_W, "profondita": DT_D, "z": [DT_Z0, DT_Z1],
+                             "gioco_lingua": DT_GAP, "lunghezza_lingua": DT_LEN, "inclinazione_tasca": TC_TILT},
        "holder": {"traslazione_x": round(tx, 3), "spalla_y": round(shoulder, 3)}}
 
 # STL nell'orientamento di stampa
 os.makedirs(STL, exist_ok=True)
 PRINT_M = {base: Matrix.Identity(4), cup: Matrix.Translation((-TH_X, -TH_Y, -z_bot)),
-           sup: HOLD_M.inverted()}
-files = {base: "P01_Base.stl", sup: "P02_Sostegno.stl", cup: "P03_Portapenne.stl"}
+           sup: HOLD_M.inverted(), tcm: Matrix.Identity(4), cr: Matrix.Identity(4)}
+files = {base: "P01_Base.stl", sup: "P02_Sostegno.stl", cup: "P03_Portapenne.stl", tcm: "P04_Portatelecomando.stl", cr: "P05_Culla_FreeBuds.stl"}
 geo["stampa"] = {}
 for o, fn in files.items():
     tmp = o.copy(); tmp.data = o.data.copy(); C_STAMPA.objects.link(tmp)
@@ -507,6 +590,26 @@ acc_path = os.path.join(ROOT, "blender", "accessori.py")
 spec = importlib.util.spec_from_file_location("accessori", acc_path)
 acc = importlib.util.module_from_spec(spec); spec.loader.exec_module(acc)
 acc.build()
+
+# distanze del telecomando dagli accessori (vertici di uno sulla superficie dell'altro, coordinate mondo)
+def world_gap(a, b):
+    from mathutils.bvhtree import BVHTree
+    deps = bpy.context.evaluated_depsgraph_get()
+    def tree(o):
+        me = o.evaluated_get(deps).to_mesh()
+        t = BVHTree.FromPolygons([o.matrix_world @ v.co for v in me.vertices], [p.vertices[:] for p in me.polygons])
+        pts = [o.matrix_world @ v.co for v in me.vertices]
+        return t, pts
+    ta, pa = tree(a); tb, pb = tree(b)
+    if ta.overlap(tb):
+        return 0.0
+    return round(min(min(tb.find_nearest(p)[3] for p in pa), min(ta.find_nearest(p)[3] for p in pb)), 2)
+geo["giochi_mm"]["telecomando-controller"] = world_gap(tc, bpy.data.objects["ACC_DualSense"])
+geo["giochi_mm"]["telecomando-penne"] = min(world_gap(tc, o) for o in bpy.data.objects if o.name.startswith("ACC_Penna"))
+geo["giochi_mm"]["modulo-portapenne"] = world_gap(tcm, cup)
+with open(os.path.join(ROOT, "dati", "geometria.json"), "w", encoding="utf-8") as f:
+    json.dump(geo, f, indent=1, ensure_ascii=False)
+print("DISTANZE", geo["giochi_mm"])
 
 for path in (os.path.abspath(__file__), acc_path):
     txt = bpy.data.texts.new(os.path.basename(path))
